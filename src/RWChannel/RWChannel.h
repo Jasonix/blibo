@@ -19,11 +19,11 @@ struct NodeHead
   uint32_t size;
 };
 
-class ReadWriteShmQueue
+class RWChannel
 {
   public:
-    ReadWriteShmQueue();
-    ~ReadWriteShmQueue();
+    RWChannel();
+    ~RWChannel();
     int RWShmQueueOpen(int key, uint32_t size);
     int RWShmQueuePut(void *data, uint32_t length);
     int RWShmQueueGet(void *buffer, uint32_t *length);

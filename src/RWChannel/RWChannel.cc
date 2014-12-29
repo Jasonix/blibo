@@ -1,7 +1,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <string.h>
-#include "RWShmQueue.h"
+#include "RWChannel.h"
 
 const char ETX = -1;
 
@@ -21,16 +21,16 @@ static char *GetShm(int key, int size, int flag)
   return shm;
 }
 
-ReadWriteShmQueue::ReadWriteShmQueue()
+RWChannel::RWChannel()
 {
 }
 
-ReadWriteShmQueue::~ReadWriteShmQueue()
+RWChannel::~RWChannel()
 {
 
 }
 
-int ReadWriteShmQueue::RWShmQueueOpen(int key, uint32_t size)
+int RWChannel::RWShmQueueOpen(int key, uint32_t size)
 {
   char *buffer = GetShm(key, size + sizeof(struct RWQueue),IPC_CREAT|0600);
   if (buffer == NULL)
@@ -46,7 +46,7 @@ int ReadWriteShmQueue::RWShmQueueOpen(int key, uint32_t size)
   return 0;
 }
 
-int ReadWriteShmQueue::RWShmQueuePut(void *data, uint32_t length)
+int RWChannel::RWShmQueuePut(void *data, uint32_t length)
 {
   char *pbuffer, *pcur;
   volatile long long *phead_pos, *ptail_pos, thead_pos, ttail_pos;
@@ -101,7 +101,7 @@ int ReadWriteShmQueue::RWShmQueuePut(void *data, uint32_t length)
   return 0;
 }
 
-int ReadWriteShmQueue::RWShmQueueGet(void *buffer, uint32_t *length)
+int RWChannel::RWShmQueueGet(void *buffer, uint32_t *length)
 {
   char *pbuffer;
   volatile long long *phead_pos, *ptail_pos, thead_pos, ttail_pos;
